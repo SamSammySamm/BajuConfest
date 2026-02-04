@@ -1,0 +1,111 @@
+:root {
+    --batik-gold: #c5a059;
+    --batik-dark: #2d241e;
+    --grey-out: #d1d5db;
+    --white: #ffffff;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    /* Batik-style background pattern */
+    background-color: #f4ece1;
+    background-image: url("https://www.transparenttextures.com/patterns/batik-fabric.png");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.booking-card {
+    background: rgba(255, 255, 255, 0.95);
+    max-width: 450px;
+    width: 100%;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-top: 8px solid var(--batik-gold);
+}
+
+h1 {
+    color: var(--batik-dark);
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.size-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+/* Base button style */
+.size-btn {
+    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Faded Grey Button (Out of Stock) */
+.size-btn.disabled {
+    background-color: #f3f4f6;
+    border-color: var(--grey-out);
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.size-btn.selected {
+    border-color: var(--batik-gold);
+    background: #fdfaf3;
+    color: var(--batik-dark);
+    font-weight: bold;
+}
+
+.stock-tag {
+    font-size: 0.7rem;
+    margin-top: 5px;
+}
+
+/* Add-on Switch */
+.addon-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.main-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--batik-dark);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.main-btn:disabled {
+    background: var(--grey-out);
+    cursor: not-allowed;
+}

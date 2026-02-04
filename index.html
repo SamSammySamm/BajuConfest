@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batik Shirt Booking</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="booking-card">
+        <header>
+            <h1>Exclusive Shirt Collection</h1>
+            <p>Select your size and add-ons below</p>
+        </header>
+
+        <section class="selection-group">
+            <h3>1. Choose Your Size</h3>
+            <div class="size-grid" id="sizeGrid">
+            </div>
+        </section>
+
+        <section class="selection-group">
+            <h3>2. Optional Add-ons</h3>
+            <div class="addon-item">
+                <div class="addon-info">
+                    <span class="addon-name">Premium Lanyard</span>
+                    <span class="addon-price">+ RM 10.00</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="lanyardToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
+        <div class="action-area">
+            <div class="summary" id="summaryText">Please select a size</div>
+            <button id="bookBtn" class="main-btn" disabled>Confirm Booking</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
