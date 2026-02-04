@@ -4,30 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batik Shirt Booking</title>
+    <title>Tempahan Baju CREW Confest</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
     <div class="booking-card">
         <header>
-            <h1>Exclusive Shirt Collection</h1>
+            <h1>Baju Crew Confest 2025</h1>
             <p>Select your size and add-ons below</p>
+            <p>Semua ini ada percuma dan hanya untuk petugas semasa CONFEST sahaja.</p>
+            <!-- Admin link (single login page) -->
+            <a id="adminBtn" href="admin.html"
+                style="position:absolute;right:20px;top:18px;padding:8px 10px;border-radius:10px;border:1px solid var(--batik-dark);background:transparent;color:var(--batik-dark);text-decoration:none;">Admin</a>
         </header>
 
         <section class="selection-group">
             <h3>1. Choose Your Size</h3>
-            <div class="size-grid" id="sizeGrid">
-            </div>
+            <div class="size-grid" id="sizeGrid"></div>
         </section>
 
         <section class="selection-group">
             <h3>2. Optional Add-ons</h3>
             <div class="addon-item">
                 <div class="addon-info">
-                    <span class="addon-name">Premium Lanyard</span>
-                    <span class="addon-price">+ RM 10.00</span>
+                    <span class="addon-name">Lanyard Confest</span>
                 </div>
                 <label class="switch">
                     <input type="checkbox" id="lanyardToggle">

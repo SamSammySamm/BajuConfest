@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="form-container">
+        <header class="form-header">
+            <h1>Provide Your Details</h1>
+            <p>Fill in the form below to complete your booking</p>
+            <!-- Admin link (single login page) -->
+            <a id="adminBtn" href="admin.html"
+                style="position:absolute;right:20px;top:20px;padding:8px 10px;border-radius:10px;border:1px solid var(--batik-dark);background:transparent;color:var(--batik-dark);text-decoration:none;">Admin</a>
+        </header>
+
+        <form id="detailsForm" class="details-form">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="studentNumber">Student Number:</label>
+                <input type="text" id="studentNumber" name="studentNumber" placeholder="Enter your student number"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="yearOfStudies">Year of Studies:</label>
+                <select id="yearOfStudies" name="yearOfStudies" required>
+                    <option value="" disabled selected>Select your year</option>
+                    <option value="1">Year 1</option>
+                    <option value="2">Year 2</option>
+                    <option value="3">Year 3</option>
+                    <option value="4">Year 4</option>
+                    <option value="5">Year 5</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="faculty">Faculty:</label>
+                <select id="faculty" required>
+                    <option value="">Select Faculty</option>
+                    <option value="Alam Bina">Fakulti Alam Bina</option>
+                    <option value="Ekonomi & Perniagaan">Fakulti Ekonomi & Perniagaan</option>
+                    <option value="Kejuruteraan">Fakulti Kejuruteraan</option>
+                    <option value="Pendidikan, Bahasa & Komunikasi">Fakulti Pendidikan, Bahasa dan Komunikasi</option>
+                    <option value="Perubatan & Sains Kesihatan">Fakulti Perubatan & Sains Kesihatan</option>
+                    <option value="Sains Komputer & Teknologi Maklumat">Fakulti Sains Komputer & Teknologi Maklumat
+                    </option>
+                    <option value="Sains Kognitif & Pembangunan Manusia">Fakulti Sains Kognitif & Pembangunan Manusia
+                    </option>
+                    <option value="Sains Sosial & Kemanusiaan">Fakulti Sains Sosial & Kemanusiaan</option>
+                    <option value="Sains Teknologi Sumber">Fakulti Sains Teknologi Sumber</option>
+                    <option value="Seni Gunaan & Kreatif">Fakulti Seni Gunaan & Kreatif</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="position">Position:</label>
+                <select id="position" name="position" required>
+                    <option value="" disabled selected>Select your position</option>
+                    <option value="MP">Majlis Pelaksana</option>
+                    <option value="AJK">AJK</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="units">Units:</label>
+                <select id="units" name="units" required>
+                    <option value="" disabled selected>Select your unit</option>
+                    <option value="Unit A">Unit A</option>
+                    <option value="Unit B">Unit B</option>
+                    <option value="Unit C">Unit C</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="college">College:</label>
+                <select id="college" name="college" required onchange="handleCollegeChange(event)">
+                    <option value="" disabled selected>Select your college</option>
+                    <option value="Kolej A">Kolej Allamanda</option>
+                    <option value="Kolej B">Kolej Bunga Raya</option>
+                    <option value="Kolej C">Kolej Cempaka</option>
+                    <option value="Kolej D">Kolej Dahlia</option>
+                    <option value="Kolej K">Kolej Kenanga</option>
+                    <option value="Kolej R">Kolej Rafflesia</option>
+                    <option value="Kolej S">Kolej Sakura</option>
+                    <option value="Kolej T">Kolej Tun Ahmad Zaidi</option>
+                    <option value="Kolej U">Unijaya</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="otherCollegeGroup" style="display: none;">
+                <label for="otherCollege">Specify College:</label>
+                <input type="text" id="otherCollege" name="otherCollege" placeholder="Enter your college name">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="main-btn">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function handleCollegeChange(event) {
+            const otherCollegeGroup = document.getElementById('otherCollegeGroup');
+            if (event.target.value === 'Others') {
+                otherCollegeGroup.style.display = 'block';
+            } else {
+                otherCollegeGroup.style.display = 'none';
+            }
+        }
+
+        // Save booking details to localStorage on submit
+        document.getElementById('detailsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const bookingFromSession = JSON.parse(sessionStorage.getItem('booking') || '{}');
+            const size = bookingFromSession.size || null;
+            const lanyard = !!bookingFromSession.lanyard;
+
+            if (!size) {
+                alert('No size selected. Please go back and choose a size.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const payload = {
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                studentNumber: document.getElementById('studentNumber').value.trim(),
+                yearOfStudies: document.getElementById('yearOfStudies').value,
+                faculty: document.getElementById('faculty').value,
+                position: document.getElementById('position').value,
+                units: document.getElementById('units').value,
+                college: (document.getElementById('college').value === 'Others') ? document.getElementById('otherCollege').value.trim() : document.getElementById('college').value,
+                size,
+                lanyard,
+                createdAt: new Date().toISOString()
+            };
+
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            bookings.push(payload);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            // clear session booking and confirm
+            sessionStorage.removeItem('booking');
+            alert('Booking submitted. Thank you!');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>

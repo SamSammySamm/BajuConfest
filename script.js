@@ -2,7 +2,7 @@
 const inventory = [
     { size: "S", stock: 5 },
     { size: "M", stock: 12 },
-    { size: "L", stock: 0 }, // This will be greyed out
+    { size: "L", stock: 3 },
     { size: "XL", stock: 2 }
 ];
 
@@ -47,8 +47,15 @@ function selectSize(size, element) {
 }
 
 bookBtn.onclick = () => {
+    if (!selectedSize) {
+        alert('Please select a size before proceeding.');
+        return;
+    }
     const hasLanyard = document.getElementById('lanyardToggle').checked;
-    alert(`Success!\nBooking: Size ${selectedSize}\nLanyard: ${hasLanyard ? 'Added' : 'None'}`);
+    // store booking so details page can read it if needed
+    sessionStorage.setItem('booking', JSON.stringify({ size: selectedSize, lanyard: hasLanyard }));
+    // redirect to details page
+    window.location.href = 'details.html';
 };
 
 // Initialize the page

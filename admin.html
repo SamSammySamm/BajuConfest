@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin — Bookings</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* small admin tweaks */
+        .admin-container {
+            max-width: 900px;
+            margin: 28px auto;
+            padding: 22px;
+            border-radius: 14px;
+            background: #fff;
+        }
+
+        .admin-login {
+            max-width: 420px;
+            margin: 6px auto 18px;
+        }
+
+        .dashboard {
+            margin-top: 14px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .stat {
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #f7f3ee;
+            border: 1px solid rgba(197, 160, 89, 0.09);
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        th,
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .small-btn {
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            background: var(--batik-dark);
+            color: #fff;
+        }
+
+        .small-btn.ghost {
+            background: #eee;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <header class="form-header">
+            <h1>Admin — Booking Dashboard</h1>
+            <p>Sign in to view all bookings</p>
+        </header>
+
+        <div id="loginArea" class="admin-login">
+            <form id="adminLogin" class="details-form">
+                <div class="form-group">
+                    <label for="adminId">Admin ID</label>
+                    <input id="adminId" required placeholder="AdminWebConfest25" />
+                </div>
+                <div class="form-group">
+                    <label for="adminPass">Password</label>
+                    <input id="adminPass" type="password" required placeholder="••••••••" />
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="main-btn">Sign In</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="adminArea" style="display:none;">
+            <div class="dashboard">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <h3>Bookings Overview</h3>
+                    <div class="actions">
+                        <button id="refreshBtn" class="small-btn ghost">Refresh</button>
+                        <button id="clearBtn" class="small-btn">Clear All</button>
+                        <button id="logoutBtn" class="small-btn ghost">Logout</button>
+                    </div>
+                </div>
+
+                <div class="stats" id="statsContainer"></div>
+
+                <div style="overflow:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Student ID</th>
+                                <th>Size</th>
+                                <th>Lanyard</th>
+                                <th>Faculty / Unit</th>
+                                <th>College</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_ID = 'AdminWebConfest25';
+        const ADMIN_PASS = 'MPP2425/Confest25';
+
+        const loginArea = document.getElementById('loginArea');
+        const adminArea = document.getElementById('adminArea');
+        const adminLogin = document.getElementById('adminLogin');
+        const statsContainer = document.getElementById('statsContainer');
+        const bookingsTable = document.getElementById('bookingsTable');
+
+        adminLogin.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const id = document.getElementById('adminId').value.trim();
+            const pass = document.getElementById('adminPass').value;
+            if (id === ADMIN_ID && pass === ADMIN_PASS) {
+                loginArea.style.display = 'none';
+                adminArea.style.display = 'block';
+                renderBookings();
+            } else {
+                alert('Invalid credentials');
+            }
+        });
+
+        function renderBookings() {
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            // stats by size
+            const counts = bookings.reduce((acc, b) => {
+                acc.total = (acc.total || 0) + 1;
+                acc[b.size] = (acc[b.size] || 0) + 1;
+                return acc;
+            }, {});
+            statsContainer.innerHTML = '';
+            const sizes = ['S', 'M', 'L', 'XL'];
+            const totalStat = document.createElement('div');
+            totalStat.className = 'stat';
+            totalStat.textContent = `Total Bookings: ${counts.total || 0}`;
+            statsContainer.appendChild(totalStat);
+            sizes.forEach(s => {
+                const el = document.createElement('div');
+                el.className = 'stat';
+                el.textContent = `${s}: ${counts[s] || 0}`;
+                statsContainer.appendChild(el);
+            });
+
+            // populate table
+            bookingsTable.innerHTML = '';
+            bookings.slice().reverse().forEach((b, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${bookings.length - i}</td>
+                    <td>${escapeHtml(b.name)}</td>
+                    <td>${escapeHtml(b.phone)}</td>
+                    <td>${escapeHtml(b.studentNumber)}</td>
+                    <td>${escapeHtml(b.size)}</td>
+                    <td>${b.lanyard ? 'Yes' : 'No'}</td>
+                    <td>${escapeHtml(b.faculty)} / ${escapeHtml(b.units)}</td>
+                    <td>${escapeHtml(b.college)}</td>
+                    <td>${new Date(b.createdAt).toLocaleString()}</td>
+                `;
+                bookingsTable.appendChild(tr);
+            });
+        }
+
+        document.getElementById('refreshBtn').addEventListener('click', renderBookings);
+        document.getElementById('clearBtn').addEventListener('click', function () {
+            if (!confirm('Clear all bookings?')) return;
+            localStorage.removeItem('bookings');
+            renderBookings();
+        });
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            adminArea.style.display = 'none';
+            loginArea.style.display = 'block';
+            document.getElementById('adminPass').value = '';
+        });
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/[&<>"']/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" }[m]); });
+        }
+    </script>
+</body>
+
+</html>
